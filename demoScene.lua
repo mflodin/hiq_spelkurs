@@ -12,6 +12,7 @@ local debugScene = {}
 debugScene.new = function()
   local scene = {}
   
+  -- Set up a fancy bubble particle animation
   local particleConf = {    
     position = { x = 1024 / 2, y = love.graphics:getHeight() },
     lifeLengthSeconds = 0, 
@@ -37,28 +38,28 @@ debugScene.new = function()
       }          
     }
   }
-  local particleTester = Particles.new(particleConf)
+  local particles_bubbles = Particles.new(particleConf)
   
   local onBegin = function()
   
   end
 
   local onUpdate = function(deltaTime)
-    if particleTester then
-      particleTester.update(deltaTime)
+    if particles_bubbles then
+      particles_bubbles.update(deltaTime)
       
-      if particleTester.canRemove() then
-        particleTester = nil
+      if particles_bubbles.canRemove() then
+        particles_bubbles = nil
       end
     end
   end
   
   local onDraw = function()
     
-    if particleTester then
-      particleTester.draw(0, 0)
+    if particles_bubbles then
+      particles_bubbles.draw(0, 0)
       love.graphics.setColor(255, 0, 0, 255)
-      love.graphics.print("Particles: " .. #particleTester.particles, 100, 700) 
+      love.graphics.print("Particles: " .. #particles_bubbles.particles, 100, 700) 
       love.graphics.setColor(255, 255, 255, 255)
     end
   end
@@ -77,16 +78,12 @@ debugScene.new = function()
 
   scene = Scene.new(onBegin, onUpdate, onDraw, onMouseReleased, onMousePressed, onStop)
   
-  --  gamescene = breakoutScene.new()
---  gamescene = pongScene.new("playerA", "playerB")
-
-
---  --open tile scene
+  -- Set up a few buttons and connect them to their scenes  
   local openPongAIScene = function()    
     local pongScene = PongScene.new("ai_smoothA", "ai_smoothB")  
     scene.addChildScene(pongScene)
     scene.buttons = {}
-    particleTester = nil
+    particles_bubbles = nil
   end
   scene.registerButton(Button.newButton(32, 32, "gfx/pongai.png", "gfx/pongai.png", openPongAIScene, nil, {4, 4}))
   
@@ -94,33 +91,33 @@ debugScene.new = function()
     local pongScene = PongScene.new("playerA", "ai_smoothB")  
     scene.addChildScene(pongScene)
     scene.buttons = {}
-    particleTester = nil
+    particles_bubbles = nil
   end
-  scene.registerButton(Button.newButton(32, 32 + 128 + 16, "gfx/pongpva.png", "gfx/pongpva.png", openPongPvsAiScene, nil, {4, 4}))
+  scene.registerButton(Button.newButton(32, 176, "gfx/pongpva.png", "gfx/pongpva.png", openPongPvsAiScene, nil, {4, 4}))
 
   local openPongPvPScene = function()    
     local pongScene = PongScene.new("playerA", "playerB")  
     scene.addChildScene(pongScene)
     scene.buttons = {}
-    particleTester = nil
+    particles_bubbles = nil
   end
-  scene.registerButton(Button.newButton(32, 32 + 256 + 32, "gfx/pongpvp.png", "gfx/pongpvp.png", openPongPvPScene, nil, {4, 4}))
+  scene.registerButton(Button.newButton(32, 320, "gfx/pongpvp.png", "gfx/pongpvp.png", openPongPvPScene, nil, {4, 4}))
 
   local openBreakoutScene = function()    
     local bscene = BreakoutScene.new()  
     scene.addChildScene(bscene)
     scene.buttons = {}
-    particleTester = nil
+    particles_bubbles = nil
   end
-  scene.registerButton(Button.newButton(love.graphics.getWidth() - 128 - 32, 32, "gfx/breakout.png", "gfx/breakout.png", openBreakoutScene, nil, {4, 4}))
+  scene.registerButton(Button.newButton(love.graphics.getWidth() - 160, 32, "gfx/breakout.png", "gfx/breakout.png", openBreakoutScene, nil, {4, 4}))
   
   local openBreakoutFunScene = function()    
     local bscene = BreakoutFunScene.new()  
     scene.addChildScene(bscene)
     scene.buttons = {}
-    particleTester = nil
+    particles_bubbles = nil
   end
-  scene.registerButton(Button.newButton(love.graphics.getWidth() - 128 - 32, 32 + 128 + 16, "gfx/breakoutlol.png", "gfx/breakoutlol.png", openBreakoutFunScene, nil, {4, 4}))
+  scene.registerButton(Button.newButton(love.graphics.getWidth() - 160, 176, "gfx/breakoutlol.png", "gfx/breakoutlol.png", openBreakoutFunScene, nil, {4, 4}))
 
   return scene
 end

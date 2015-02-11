@@ -160,7 +160,7 @@ breakOutScene.new = function()
       actorsNum = actorsNum + 1
     end
     
-    if actorsNum == 2 then --we only have the ball and the paddle now. Next level!
+    if actorsNum == 2 then -- We only have the ball and the paddle now. Next level!
       game.nextLevel()
       ball_locked = true
       ball.position.y = love.graphics.getHeight() - 65
@@ -171,7 +171,6 @@ breakOutScene.new = function()
       ball.position.x = paddle.position.x
     end
     
-   
   end
   
   local onDraw = function()    
@@ -190,8 +189,7 @@ breakOutScene.new = function()
   local onMouseReleased = function(x, y, button)
     if ball_locked then
       ball_locked = false
-      ball.direction = { x = 0.5, y = -0.5 }
-      
+      ball.direction = { x = 0.5, y = -0.5 }      
     end
   end
   

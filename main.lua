@@ -6,8 +6,8 @@ function love.load(t)
   print("--- BEGIN GAME ---")
   love.mouse.setVisible( true )
 
-  if arg[#arg] == "-debug" then require("mobdebug").start() end -- start debugger
-  math.randomseed(os.time()) -- start random
+  if arg[#arg] == "-debug" then require("mobdebug").start() end -- start debugger for zerobrane
+  math.randomseed(os.time()) -- init random
   
   love.graphics.setBackgroundColor(255, 255, 255) 
     

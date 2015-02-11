@@ -1,5 +1,7 @@
 local Scene = require("lib/scene")
 
+--Really just an empty scene added for ease-of-use. Copy-paste and replace the templateScene name.
+
 local templateScene = {}
 templateScene.new = function()
   local scene = {}

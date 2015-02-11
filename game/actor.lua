@@ -37,7 +37,7 @@ Actor.new = function(params)
   actor.size = {
     w = actor.image:getWidth() * actor.scale.w,
     h = actor.image:getHeight() * actor.scale.h,
-    w2 = (actor.image:getWidth() / 2) * actor.scale.w,  -- The : means that we are dereferencing a function pointer from memory. 
+    w2 = (actor.image:getWidth() / 2) * actor.scale.w,  -- The : means that we are dereferencing a pointer from memory. 
     h2 = (actor.image:getHeight() / 2) * actor.scale.h, -- We're just pre-storing it here for readability and ease-of-debugging.                                        
   }                                                     -- You can make actual objects with a "this" variable attached to it in LUA by re-referencing our scope.
                                                         -- but since we're not using a typed language, it'll just give us extra overhead in the end.
@@ -65,14 +65,13 @@ Actor.new = function(params)
     actor.position.x = actor.position.x + ((actor.speed * deltatime) * actor.direction.x)
     actor.position.y = actor.position.y + ((actor.speed * deltatime) * actor.direction.y)
     
-    --we need to update this if we're tweening the actor
+    -- We need to update this two values if we're tweening the actor. 
     actor.size = {
       w = actor.image:getWidth() * actor.scale.w,
       h = actor.image:getHeight() * actor.scale.h,
       w2 = (actor.image:getWidth() / 2) * actor.scale.w,  
       h2 = (actor.image:getHeight() / 2) * actor.scale.h, 
-    }
-    
+    }    
     actor.box = actor.getBox()
     
     actor.controller(actor, deltatime) --This is where we override the actors basic behaviour.
@@ -80,13 +79,9 @@ Actor.new = function(params)
   end
   
   actor.draw = function()
-    love.graphics.setColor(actor.color)
-    
-    love.graphics.draw(actor.image, actor.position.x - (actor.size.w / 2), actor.position.y - (actor.size.h / 2), actor.rotation, actor.scale.w, actor.scale.h)
-   
-    love.graphics.setColor({255, 255, 255, 255})
-    
-    
+    love.graphics.setColor(actor.color)    
+    love.graphics.draw(actor.image, actor.position.x - (actor.size.w / 2), actor.position.y - (actor.size.h / 2), actor.rotation, actor.scale.w, actor.scale.h)   
+    love.graphics.setColor({255, 255, 255, 255})       
   end
   
   return actor

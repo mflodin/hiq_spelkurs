@@ -38,7 +38,7 @@ end
 
 Brick.Logic = function()  
   return function(actor, deltaTime)            
-    
+    -- Smart as a brick :D
   end
 end
 

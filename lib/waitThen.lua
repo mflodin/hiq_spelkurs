@@ -1,7 +1,6 @@
 local waitThen = {}
 
---waits some time 
---runs callback
+--waits around then runs the callback
 
 waitThen.new = function(time, callback)
   

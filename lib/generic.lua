@@ -7,7 +7,7 @@ Generic.new = function(onDraw, onUpdate)
   generic.canRemove = false
   
   generic.draw = onDraw or function() end
-  generic.update = onUpdate or function(deltaTime) end --will get deltatime input
+  generic.update = onUpdate or function(deltaTime) end --will always recieve deltatime input
   
   return generic
 end

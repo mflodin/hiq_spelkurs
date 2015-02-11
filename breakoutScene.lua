@@ -18,8 +18,10 @@ breakOutScene.new = function()
   
   local game = {}
   
-  --step 1:
-  --create the ball
+  -- step 1: create the ball
+  -- step 2: ????
+  -- step 3: profit!
+  
   game.createBall = function()
     
     local ballControllerParams = {
@@ -80,8 +82,11 @@ breakOutScene.new = function()
     for x = 1, 9 do
       for y = 1, 5 do
         
+        local xPos = 64 + (x * 68) -- Magic numbers are bad. This means:
+                                   -- Go 64 pixels from the left, then add (x * (the distance of the brick + 4 pixels) for some space inbetween the bricks)
+        local yPos = 64 + (y * 36) -- About the same for the y axis
         local brickParams = {
-          position = { 64 + (x * 68), 64 + (y * 36) },
+          position = { xPos, yPos }, -- Magic numbers are bad. 
           direction = { 0, 0 },
           color = colors[(x + y) % #colors],
           speed = 0, 
@@ -126,12 +131,13 @@ breakOutScene.new = function()
     for key, actor in pairs(actors) do
       actor.update(deltaTime)
       
-      if actor.remove then
+      if actor.remove then -- Now we to be able to remove the bricks that we no longer need.
         collider.removeObject(actor)
         actors[key] = nil
       end
     end
     
+    -- This is where we "lock" the ball to the paddle.
     if ball_locked then
       ball.position.x = paddle.position.x
     end
@@ -148,7 +154,7 @@ breakOutScene.new = function()
   local onMouseReleased = function(x, y, button)
     if ball_locked then
       ball_locked = false
-      ball.direction = { x = 0.5, y = -0.5 }
+      ball.direction = { x = 0.5, y = -0.5 } -- Go left, up
     end
   end
   

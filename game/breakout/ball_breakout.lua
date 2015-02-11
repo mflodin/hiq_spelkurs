@@ -20,9 +20,9 @@ Ball.speed = 250
 -- }
 Ball.controller = function(params) --optional parameter
   
-  --Construct onHit logic using params, which is passed later to the balls boundaryCollision data
-  --We're doing it like this to let the scene dictate what should happen to the ball when its done
-  --This lets us create a "cleaner" ball without having to nestle the score logic deep inside the ball object
+  -- Construct onHit logic using params, which is passed later to the balls boundaryCollision data
+  -- We're doing it like this to let the scene dictate what should happen to the ball when its done
+  -- This lets us create a "cleaner" ball without having to nestle the score logic deep inside the ball object
   local onHit = {
     left = params.onHitLeft or function() end,
     right = params.onHitRight or function() end,
