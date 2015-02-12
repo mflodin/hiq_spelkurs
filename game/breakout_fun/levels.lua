@@ -2,7 +2,7 @@ local Actor = require("game/actor")
 local Ball = require("game/breakout_fun/ball_breakout")
 local Brick = require("game/breakout_fun/brick_breakout")
 local WaitThen = require("lib/waitThen")
-local Tween = require("lib/Tween")
+local Tween = require("lib/tween")
 
 -- This class is kind of quick and dirty. Running out of time, many apologies! 
 

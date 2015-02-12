@@ -1,4 +1,4 @@
-local Imagelib = require("Lib/Imagelib")
+local Imagelib = require("lib/imagelib")
 
 local animation = {}
 

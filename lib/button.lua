@@ -1,6 +1,6 @@
 local Collision = require("lib/collision")
-local Imagelib = require("lib/ImageLib")
-local Tween = require("lib/Tween")
+local Imagelib = require("lib/imagelib")
+local Tween = require("lib/tween")
 local Hover = require("lib/Hover")
 
 local button = {}

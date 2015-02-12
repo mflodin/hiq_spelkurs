@@ -1,6 +1,6 @@
 local Scene = require("lib/scene")
 local Collider = require("lib/collider")
-local Tween = require("lib/Tween")
+local Tween = require("lib/tween")
 local WaitThen = require("lib/waitThen")
 
 local Actor = require("game/actor")
@@ -11,7 +11,7 @@ local Score = require("game/breakout_fun/score")
 local Lives = require("game/breakout_fun/lifeAnimation")
 local Levels = require("game/breakout_fun/levels")
 
-local Imagelib = require("lib/imageLib")
+local Imagelib = require("lib/imagelib")
 
 local breakOutScene = {}
 breakOutScene.new = function()

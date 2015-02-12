@@ -1,5 +1,5 @@
 
-local imageLib = require("lib/imageLib")
+local imageLib = require("lib/imagelib")
 local collision = require("lib/collision")
 
 local Actor = {}

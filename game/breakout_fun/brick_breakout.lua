@@ -1,8 +1,8 @@
 local Collision = require("lib/collision")
 local Vector = require("lib/vector")
-local Imagelib = require("lib/imageLib")
+local Imagelib = require("lib/imagelib")
 local Generic = require("lib/generic")
-local Tween = require("lib/Tween")
+local Tween = require("lib/tween")
 local WaitThen = require("lib/waitThen")
 
 local Brick = {}

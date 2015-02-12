@@ -1,4 +1,4 @@
-local Imagelib = require("lib/Imagelib")
+local Imagelib = require("lib/imagelib")
 local Animation = require("lib/animation")
 
 local create_hover_text = function(displayParams)

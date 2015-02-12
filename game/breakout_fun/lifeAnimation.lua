@@ -1,4 +1,4 @@
-local Imagelib = require("lib/imageLib")
+local Imagelib = require("lib/imagelib")
 local WaitThen = require("lib/waitThen")
 local Tween = require("lib/tween")
 

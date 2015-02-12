@@ -1,6 +1,6 @@
 local Hover_graphics = require("lib/hover_graphics")
-local Tween = require("lib/Tween")
-local Imagelib = require("lib/Imagelib")
+local Tween = require("lib/tween")
+local Imagelib = require("lib/imagelib")
 --local gameSettings = require("cfg/gameSettings")
 local Animation = require("lib/animation")
 

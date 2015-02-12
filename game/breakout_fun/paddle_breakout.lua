@@ -1,6 +1,6 @@
 local Collision = require("lib/collision")
 local Vector = require("lib/vector")
-local Tween = require("lib/Tween")
+local Tween = require("lib/tween")
 local WaitThen = require("lib/waitThen")
 local Ball = require("game/breakout_fun/ball_breakout")
 

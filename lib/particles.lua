@@ -4,8 +4,8 @@
 -- It's literally the code from the abyss and you dont want to stare at it because it'll look back and you'll be stuck in recursive hell. But with particles.
 -- It's super slow because it uses tweens. 
 
-local Tween = require("lib/Tween")
-local ImageLib = require("lib/ImageLib")
+local Tween = require("lib/tween")
+local ImageLib = require("lib/imagelib")
 
 local particlesHolder = {}
 

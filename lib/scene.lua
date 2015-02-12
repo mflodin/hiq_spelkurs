@@ -1,4 +1,4 @@
-local WaitThen = require("lib/WaitThen")
+local WaitThen = require("lib/waitThen")
 local scene = {}
 
 scene.new = function(beginCb, updateCb, drawCb, mousereleasedCb, mousepressedCb, stopCb )
