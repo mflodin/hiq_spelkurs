@@ -19,6 +19,14 @@ scene.new = function(beginCb, updateCb, drawCb, mousereleasedCb, mousepressedCb,
   s.waitThens = {}
   s.generics = {}
   
+  local displayDebugInformation = false
+  local debugInfo = {
+    buttons = 0,
+    tweens = 0,
+    waitThens = 0,
+    generics = 0,
+  }
+  
   s.addTween = function(tween)
     table.insert(s.tweens, tween)
   end
@@ -46,22 +54,29 @@ scene.new = function(beginCb, updateCb, drawCb, mousereleasedCb, mousepressedCb,
       for i = 1, #s.buttons do 
         s.buttons[i].update(deltatime)
       end    
+      debugInfo.buttons = #s.buttons
       
+      debugInfo.tweens = 0
       for key, value in pairs(s.tweens) do
+        debugInfo.tweens = debugInfo.tweens + 1
         if value:update(deltatime) then
-          key = nil
-          value = nil
+          s.tweens[key] = nil
         end
       end
       
+      debugInfo.waitThens = 0
       for key, value in pairs(s.waitThens) do
+        debugInfo.waitThens = debugInfo.waitThens + 1
+        
         value.update(deltatime)
         if value.done then
           s.waitThens[key] = nil
         end
       end
-        
+      
+      debugInfo.generics = 0
       for key, value in pairs(s.generics) do
+        debugInfo.generics = debugInfo.generics + 1
         value.update(deltatime)
         if value.canRemove then
           s.generics[key] = nil
@@ -98,6 +113,17 @@ scene.new = function(beginCb, updateCb, drawCb, mousereleasedCb, mousepressedCb,
     for key, value in pairs(s.generics) do
       value.draw()      
     end        
+    
+    if displayDebugInformation and s.childScene == nil then
+
+      love.graphics.setColor(0, 0, 0, 255)
+      love.graphics.print("buttons " .. debugInfo.buttons, 0, 0)
+      love.graphics.print("tweens " .. debugInfo.tweens, 0, 16)
+      love.graphics.print("waitThens " .. debugInfo.waitThens, 0, 32)
+      love.graphics.print("generics " .. debugInfo.generics, 0, 48)     
+      love.graphics.setColor(255, 255, 255, 255)
+      
+    end
 
   end
 
