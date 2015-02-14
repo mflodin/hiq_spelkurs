@@ -1,9 +1,9 @@
 local Scene = require("lib/scene")
 local Button = require("lib/button")
 
-local PongScene = require("pongScene")
-local BreakoutScene = require("breakoutScene")
-local BreakoutFunScene = require("breakoutFunScene")
+local PongScene = require("game/pong/scene")
+local BreakoutScene = require("game/breakout/scene")
+local BreakoutFunScene = require("game/breakout_fun/scene")
 
 local Particles = require("lib/particles")
 
