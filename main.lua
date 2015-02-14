@@ -1,4 +1,5 @@
 local DemoScene = require("demoScene")
+local ParallaxScene = require("tests/parallaxScene")
 
 local gamescene
 
@@ -12,6 +13,8 @@ function love.load(t)
   love.graphics.setBackgroundColor(255, 255, 255) 
     
   gamescene = DemoScene.new()
+--  gamescene = ParallaxScene.new()
+
   gamescene.begin()
 end
 

@@ -4,6 +4,8 @@ local Button = require("lib/button")
 local PongScene = require("game/pong/scene")
 local BreakoutScene = require("game/breakout/scene")
 local BreakoutFunScene = require("game/breakout_fun/scene")
+local ParallaxScene = require("tests/parallaxScene")
+
 
 local Particles = require("lib/particles")
 
@@ -118,6 +120,15 @@ debugScene.new = function()
     particles_bubbles = nil
   end
   scene.registerButton(Button.newButton(love.graphics.getWidth() - 160, 176, "gfx/breakoutlol.png", "gfx/breakoutlol.png", openBreakoutFunScene, nil, {4, 4}))
+
+  local openParallaxScene = function()    
+      local bscene = ParallaxScene.new()
+      scene.addChildScene(bscene)
+      scene.buttons = {}
+      particles_bubbles = nil
+    end
+    scene.registerButton(Button.newButton(196, 32, "gfx/parallax.png", "gfx/parallax.png", openParallaxScene, nil, {4, 4}))
+
 
   return scene
 end
