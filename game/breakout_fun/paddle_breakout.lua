@@ -16,7 +16,7 @@ Paddle.animations = {}
 Paddle.animations.boink = function(scene)
   return function(actor)
     local tweenTime = 0.1
-    local originalScale = { w = actor.scale.w, h = actor.scale.h }
+    local originalScale = { w = 2, h = 2 }
     local newScale = { w = 2.3, h = 1.2 }
     local tween = Tween.new(tweenTime, actor.scale, newScale, "inOutQuad")
     scene.addTween(tween)                        

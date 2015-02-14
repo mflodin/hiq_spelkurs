@@ -97,7 +97,7 @@ Brick.animations.onHit = function(scene)
   return function(actor)            
     
     local tweenTime = 0.1
-    local originalScale = { w = actor.scale.w, h = actor.scale.h }
+    local originalScale = { w = 2, h = 2 }
     local newScale = { w = 1.0, h = 1.0 }
     local tween = Tween.new(tweenTime, actor.scale, newScale, "inOutQuad")
     scene.addTween(tween)                        
