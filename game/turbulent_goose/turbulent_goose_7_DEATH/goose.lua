@@ -36,7 +36,7 @@ Goose.animation = {}
 Goose.animation.death = function(scene, actor)
   
   return function()
-    
+    --death animation
     local tweenTime = 2
     local image = actor.image
     local explo = Goose.image.explode
@@ -75,6 +75,9 @@ Goose.animation.death = function(scene, actor)
     
     local tween = Tween.new(tweenTime, gooseAni, targetAni, "outQuad")
     scene.addTween(tween)
+    
+    
+
     
   end
 end

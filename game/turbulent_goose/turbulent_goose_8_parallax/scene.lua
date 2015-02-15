@@ -4,6 +4,10 @@ local Actor = require("game/actor")
 local Goose = require("game/turbulent_goose/turbulent_goose_8_parallax/goose")
 local Skyrock = require("game/turbulent_goose/turbulent_goose_8_parallax/skyrock")
 local Parallax = require("lib/parallax")
+local Score = require("lib/score")
+local Tween = require("lib/tween")
+local WaitThen = require("lib/waitThen")
+local Generic = require("lib/generic")
 
 local turbulentGoose = {}
 turbulentGoose.new = function(playerA_settings, playerB_settings)
@@ -22,11 +26,16 @@ turbulentGoose.new = function(playerA_settings, playerB_settings)
   local parallax_far 
   local parallax_near 
   
-  local createGoose = function() 
+  local bestScore = nil
+  local currentScore = nil
+  local currentScore_float = 0
+  
+  local createGoose = function(reset) 
     
     local gooseControllerParams = {
       jumpKey = " ",
       scene = scene,
+      reset = reset
     }
     
     local gooseParams = {
@@ -114,26 +123,90 @@ turbulentGoose.new = function(playerA_settings, playerB_settings)
     }
     parallax_near = Parallax.new(position, near_params)    
   end
+  setupParallax(skyPosition) --Notice that we're setting this up here and not on onBegin - we dont need or want to reset this.
   
-  local onBegin = function()
-    love.graphics.setBackgroundColor(94, 169, 255) 
+  goose.fadeIn = function()
+    local tweenTime = 0.5
+    local current = { 
+      a = 255,     
+    }
+    local target = {
+      a = 0
+    }
+    
+    local function draw()
+      love.graphics.setColor(0, 0, 0, current.a)
+      love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())      
+      love.graphics.setColor(255, 255, 255, 255)
+    end
+    
+    scene.addGeneric(Generic.new(draw), tweenTime)
+    
+    local tween = Tween.new(tweenTime, current, target, "linear")
+    scene.addTween(tween)
+  end
+  
+  goose.reset = function()
+    goose.fadeIn()
+    
+    spawnTimer = 0
     
     actors = {}
     
-    local goose = createGoose()
-    actors[#actors + 1] = goose
+    local bird = createGoose(goose.reset)
+    actors[#actors + 1] = bird
     
     --We're just adding collision, not what actually happens when we collide.
     --For now, we just turn the sky red.
-    collider = Collider.new(goose, Goose.animation.death(scene, goose))
+    collider = Collider.new(bird, Goose.event.onDeath(scene, bird, goose.reset))
     
     createSkyRocks(Skyrock.start_y)
     
-    setupParallax(skyPosition)
+    local previousScore = 0
+    if bestScore then
+      previousScore = bestScore.score
+    end
     
+    local bestScoreParams = {
+      start_score = previousScore,
+      numbers_max = 4,
+      color = { 50, 100, 150, 200 },
+      position = { x = 640, y = 550 },
+      numbersQuad = {
+        image = "gfx/numbers_inv.png",
+        rows = 10, 
+        columns = 1, 
+        scale = {10, 10},
+      },  
+    } 
+    bestScore = Score.new(bestScoreParams)
+    
+    local scoreParams = {
+      start_score = 0,
+      numbers_max = 4,
+      color = { 200, 100, 50, 200 },
+      position = { x = 640, y = 500 },
+      numbersQuad = {
+        image = "gfx/numbers_inv.png",
+        rows = 10, 
+        columns = 1, 
+        scale = {10, 10},
+      },  
+    } 
+    currentScore = Score.new(scoreParams)
+  end
+  
+  local onBegin = function()
+    love.graphics.setBackgroundColor(94, 169, 255) 
+    goose.reset()
   end
 
   local onUpdate = function(deltaTime)
+    
+    if currentScore.score > bestScore.score then
+      bestScore.set(currentScore.score)
+      bestScore.color = { 255, 0, 0, 200 }
+    end
     
     if collider then
       collider.update(deltaTime)
@@ -144,6 +217,10 @@ turbulentGoose.new = function(playerA_settings, playerB_settings)
     if spawnTimer > spawnTime then
       createSkyRocks(Skyrock.space + math.random(Skyrock.start_y))
       spawnTimer = spawnTimer - spawnTime
+      
+      if gooseActor then
+        currentScore.add(1) 
+      end
     end
     
     for key, actor in pairs(actors) do
@@ -152,6 +229,7 @@ turbulentGoose.new = function(playerA_settings, playerB_settings)
       if actor.remove then
         if actor == gooseActor then
           collider = nil --This is spaghett-ish code. It should be stored as a meta function on the goose. 
+          gooseActor = nil
         end   
       
         if collider then
@@ -177,6 +255,9 @@ turbulentGoose.new = function(playerA_settings, playerB_settings)
     end
     
     parallax_near.draw()
+    
+    currentScore.draw()
+    bestScore.draw()
         
   end
   

@@ -8,7 +8,7 @@ SkyRock.gfx = {
   down = "gfx/goose/skyRockDown.png",
 }
 
-SkyRock.speed = 200
+SkyRock.speed = 150
 SkyRock.space = 400
 SkyRock.start_y = 450
 SkyRock.rockDistance = -650
