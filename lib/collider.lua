@@ -6,7 +6,7 @@ Collider.new = function(mainObject, main_onCollision)
   
   collider.mainObject = mainObject
   collider.onMainCollision = main_onCollision 
-  collider.objects = {}
+  collider.objects = {}  
   
   collider.addObject = function(object, object_onCollisionCb, colliderCb)    
     collider.objects[object] = { object = object, onCollision = object_onCollisionCb, collider = colliderCb }
@@ -26,6 +26,16 @@ Collider.new = function(mainObject, main_onCollision)
                -- but it makes it fast. Fortunately, thats good enough for us right now! :)
       end
     end
+  end
+  
+  collider.getLiving = function()
+    local living = 0
+    --Here's the problems with having a list indexed the way we do - we cant get the length smoothly
+    for key, obj in pairs(collider.objects) do            
+      living = living + 1
+    end
+    
+    return living
   end
   
   return collider

@@ -4,7 +4,6 @@ local Imagelib = require("lib/imagelib")
 local Parallax = {}
 
 --local example_params = {
---  position_link = actor.position,
 --  segments = {
 --    { 
 --      image = "gfx/wave_red.png",

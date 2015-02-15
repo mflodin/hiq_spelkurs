@@ -1,11 +1,20 @@
 local Scene = require("lib/scene")
 local Button = require("lib/button")
+local Imagelib = require("lib/Imagelib")
 
 local PongScene = require("game/pong/scene")
 local BreakoutScene = require("game/breakout/scene")
 local BreakoutFunScene = require("game/breakout_fun/scene")
 local ParallaxScene = require("tests/parallaxScene")
 
+local Goose1Scene = require("game/turbulent_goose/turbulent_goose_1_start/scene")
+local Goose2Scene = require("game/turbulent_goose/turbulent_goose_2_gravity/scene")
+local Goose3Scene = require("game/turbulent_goose/turbulent_goose_3_jump/scene")
+local Goose4Scene = require("game/turbulent_goose/turbulent_goose_4_simpleAnimation/scene")
+local Goose5Scene = require("game/turbulent_goose/turbulent_goose_5_enemies/scene")
+local Goose6Scene = require("game/turbulent_goose/turbulent_goose_6_collision/scene")
+local Goose7Scene = require("game/turbulent_goose/turbulent_goose_7_DEATH/scene")
+local Goose8Scene = require("game/turbulent_goose/turbulent_goose_8_parallax/scene")
 
 local Particles = require("lib/particles")
 
@@ -45,7 +54,7 @@ debugScene.new = function()
   local onBegin = function()
   
   end
-
+  
   local onUpdate = function(deltaTime)
     if particles_bubbles then
       particles_bubbles.update(deltaTime)
@@ -53,7 +62,8 @@ debugScene.new = function()
       if particles_bubbles.canRemove() then
         particles_bubbles = nil
       end
-    end
+    end    
+    
   end
   
   local onDraw = function()
@@ -64,6 +74,7 @@ debugScene.new = function()
       love.graphics.print("Particles: " .. #particles_bubbles.particles, 100, 700) 
       love.graphics.setColor(255, 255, 255, 255)
     end
+    
   end
   
   local onMouseReleased = function(x, y, button)
@@ -122,14 +133,77 @@ debugScene.new = function()
   scene.registerButton(Button.newButton(love.graphics.getWidth() - 160, 176, "gfx/breakoutlol.png", "gfx/breakoutlol.png", openBreakoutFunScene, nil, {4, 4}))
 
   local openParallaxScene = function()    
-      local bscene = ParallaxScene.new()
-      scene.addChildScene(bscene)
-      scene.buttons = {}
-      particles_bubbles = nil
-    end
-    scene.registerButton(Button.newButton(196, 32, "gfx/parallax.png", "gfx/parallax.png", openParallaxScene, nil, {4, 4}))
-
-
+    local bscene = ParallaxScene.new()
+    scene.addChildScene(bscene)
+    scene.buttons = {}
+    particles_bubbles = nil
+  end
+  scene.registerButton(Button.newButton(196, 32, "gfx/parallax.png", "gfx/parallax.png", openParallaxScene, nil, {4, 4}))  
+  
+  local openGoose1Scene = function()    
+    local bscene = Goose1Scene.new()
+    scene.addChildScene(bscene)
+    scene.buttons = {}
+    particles_bubbles = nil
+  end
+  scene.registerButton(Button.newButton(196 + 160, 32, "gfx/goose/button.png", "gfx/goose/button.png", openGoose1Scene, nil, {2, 2}))
+  
+  local openGoose2Scene = function()    
+    local bscene = Goose2Scene.new()
+    scene.addChildScene(bscene)
+    scene.buttons = {}
+    particles_bubbles = nil
+  end
+  scene.registerButton(Button.newButton(196 + 160 + 70, 32, "gfx/goose/button2.png", "gfx/goose/button2.png", openGoose2Scene, nil, {2, 2}))  
+  
+  local openGoose3Scene = function()    
+    local bscene = Goose3Scene.new()
+    scene.addChildScene(bscene)
+    scene.buttons = {}
+    particles_bubbles = nil
+  end
+  scene.registerButton(Button.newButton(196 + 160, 102, "gfx/goose/button3.png", "gfx/goose/button3.png", openGoose3Scene, nil, {2, 2}))    
+  
+  local openGoose4Scene = function()    
+    local bscene = Goose4Scene.new()
+    scene.addChildScene(bscene)
+    scene.buttons = {}
+    particles_bubbles = nil
+  end
+  scene.registerButton(Button.newButton(196 + 160 + 70, 102, "gfx/goose/button4.png", "gfx/goose/button4.png", openGoose4Scene, nil, {2, 2}))    
+  
+  local openGoose5Scene = function()    
+    local bscene = Goose5Scene.new()
+    scene.addChildScene(bscene)
+    scene.buttons = {}
+    particles_bubbles = nil
+  end
+  scene.registerButton(Button.newButton(196 + 160, 172, "gfx/goose/button5.png", "gfx/goose/button5.png", openGoose5Scene, nil, {2, 2}))    
+  
+  local openGoose6Scene = function()    
+    local bscene = Goose6Scene.new()
+    scene.addChildScene(bscene)
+    scene.buttons = {}
+    particles_bubbles = nil
+  end
+  scene.registerButton(Button.newButton(196 + 160 + 70, 172, "gfx/goose/button6.png", "gfx/goose/button6.png", openGoose6Scene, nil, {2, 2}))    
+  
+  local openGoose7Scene = function()    
+    local bscene = Goose7Scene.new()
+    scene.addChildScene(bscene)
+    scene.buttons = {}
+    particles_bubbles = nil
+  end
+  scene.registerButton(Button.newButton(196 + 160, 242, "gfx/goose/button7.png", "gfx/goose/button7.png", openGoose7Scene, nil, {2, 2})) 
+  
+  local openGoose8Scene = function()    
+    local bscene = Goose8Scene.new()
+    scene.addChildScene(bscene)
+    scene.buttons = {}
+    particles_bubbles = nil
+  end
+  scene.registerButton(Button.newButton(196 + 160 + 70, 242, "gfx/goose/button8.png", "gfx/goose/button8.png", openGoose8Scene, nil, {2, 2})) 
+  
   return scene
 end
 

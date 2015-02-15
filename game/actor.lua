@@ -80,7 +80,12 @@ Actor.new = function(params)
   
   actor.draw = function()
     love.graphics.setColor(actor.color)    
-    love.graphics.draw(actor.image, actor.position.x - (actor.size.w / 2), actor.position.y - (actor.size.h / 2), actor.rotation, actor.scale.w, actor.scale.h)   
+    --love.graphics.draw(actor.image, actor.position.x - (actor.size.w / 2), actor.position.y - (actor.size.h / 2), 
+    love.graphics.draw(actor.image, actor.position.x, actor.position.y, 
+      actor.rotation, 
+      actor.scale.w, actor.scale.h,
+      actor.image:getWidth() / 2, actor.image:getHeight() / 2)   
+      
     love.graphics.setColor({255, 255, 255, 255})       
   end
   
