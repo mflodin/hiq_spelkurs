@@ -34,8 +34,20 @@ Score.new = function(params)
     table.insert(score.numberGfx, quad.getRenderable(i, 0))
   end
 
-  score.add = function(points)
-    score.score = score.score + points
+  score.addPoint = function()
+    score.score = score.score - score.score % 10
+    score.score = score.score + math.random(2,9)
+    score.update()
+  end
+
+  score.addArrow = function()
+    local lastDigit = score.score % 10
+    if (score.score > 10) -- ensure we don't get an arrow at the front
+      then
+        score.score = (score.score - lastDigit + 1) -- replace last digit with 1 (arrow)
+    end
+    score.score = score.score * 10 -- shift left
+    score.score = score.score + lastDigit -- reattach last digit
     score.update()
   end
   
@@ -52,7 +64,7 @@ Score.new = function(params)
   score.draw = function()
     love.graphics.setColor(score.color)
 
-    local xDist = 4 * params.numbersQuad.scale[1]
+    local xDist = (params.numbersQuad.size[1] or 4) * params.numbersQuad.scale[1]
     for i = 1, #score.values do
       local numIndex = score.values[i] + 1
       local extraLetterDistance = (xDist * (i - 1))

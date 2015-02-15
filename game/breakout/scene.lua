@@ -19,7 +19,7 @@ breakOutScene.new = function()
   local game = {}
   
   -- step 1: create the ball
-  -- step 2: ????
+  -- step 2: cheat
   -- step 3: profit!
   
   game.createBall = function()

@@ -10,7 +10,7 @@ Paddle.gfx = {
   image = "gfx/paddle.png",
 }
 
-Paddle.speed = 250
+Paddle.speed = 1000
 
 Paddle.animations = {}
 Paddle.animations.boink = function(scene)

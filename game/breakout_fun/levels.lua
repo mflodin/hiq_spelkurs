@@ -220,6 +220,48 @@ Levels.spawnLevelTest = function(scene, game, collider, score)
   
 end 
 
+Levels.spawnLevelCheat = function(scene, game, collider, score)
+  
+  score.color = Brick.meta.lightBlue.color
+
+  local brickMeta = {
+    Brick.meta.blue, 
+    Brick.meta.lightBlue,
+    Brick.meta.white,       
+  }
+  
+  local addScoreOnHit = function()
+    score.addPoint()
+  end
+
+  local addScoreOnDeath = function()
+    score.addArrow()
+  end
+  
+  local level = {
+    { 1, 0, 0, 0, 1, 0, 2, 2, 2 },
+    { 1, 1, 0, 1, 1, 0, 2, 0, 0 },
+    { 1, 0, 1, 0, 1, 0, 2, 0, 0 },
+    { 1, 0, 0, 0, 1, 0, 2, 2, 2 },
+    { 1, 0, 0, 0, 1, 0, 2, 0, 0 },
+    { 1, 0, 0, 0, 1, 0, 2, 0, 0 },
+    { 1, 0, 0, 0, 1, 0, 2, 0, 0 },
+    { 1, 0, 0, 0, 1, 0, 2, 0, 0 },
+  }
+  
+  local space_x, space_y = 68, 36
+  for y = 1, #level do
+    for x = 1, #level[y] do
+      
+      if not(level[y][x] == 0) then
+        local brickType = brickMeta[level[y][x]]
+        Levels.spawnBrick(scene, game, collider, score, brickType, x, y, addScoreOnHit, addScoreOnDeath)        
+      end
+    end
+  end
+  
+end
+
 
 
 return Levels

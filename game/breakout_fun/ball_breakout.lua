@@ -7,9 +7,9 @@ Ball.gfx = {
   image = "gfx/ball.png",
 }
 
-Ball.speed = 250
-Ball.speedMax = 300
-Ball.speedIncreaseOnPaddle = 5 
+Ball.speed = 200
+Ball.speedMax = 400
+Ball.speedIncreaseOnPaddle = 25
 
 -- The ball simply bounces on the sides and travels forward.
 -- If we bounce on the sides, we increase the speed by 10%.

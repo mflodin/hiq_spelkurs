@@ -27,10 +27,7 @@ breakOutScene.new = function()
   local lives = {}
   local level = 1
   local levels = {
-    Levels.spawnLevelOne,
-    Levels.spawnLevelTwo,
-    Levels.spawnLevelThree,
-    Levels.spawnLevelFour    
+    Levels.spawnLevelCheat   
   }
   
   game.nextLevel = function()
@@ -127,14 +124,15 @@ breakOutScene.new = function()
     
     local scoreParams = {
       start_score = 0,
-      numbers_max = 8,
-      color = { 200, 200, 200, 255 },
+      numbers_max = 1,
+      color = { 100, 255, 100, 255 },
       position = { x = 74, y = 16 },
       numbersQuad = {
-        image = "gfx/numbers_inv.png",
+        image = "gfx/numbers-arrow.png",
         rows = 10, 
         columns = 1, 
-        scale = {20, 20},
+        scale = {2, 2},
+        size = {8, 10}
       },  
     } 
     score = Score.new(scoreParams)
