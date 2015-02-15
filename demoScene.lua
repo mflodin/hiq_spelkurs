@@ -1,6 +1,6 @@
 local Scene = require("lib/scene")
 local Button = require("lib/button")
-local Imagelib = require("lib/Imagelib")
+local Imagelib = require("lib/imagelib")
 
 local PongScene = require("game/pong/scene")
 local BreakoutScene = require("game/breakout/scene")
