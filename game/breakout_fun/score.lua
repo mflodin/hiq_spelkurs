@@ -35,8 +35,11 @@ Score.new = function(params)
   end
 
   score.add = function(points)
-    score.score = score.score + points
-    score.update()
+    if(score.score < 9)
+      then
+      score.score = score.score + points
+      score.update()
+    end
   end
   
   score.remove = function(points)
@@ -53,7 +56,7 @@ Score.new = function(params)
     love.graphics.setColor(score.color)
 
     local xDist = 4 * params.numbersQuad.scale[1]
-    for i = 1, #score.values do
+    for i = 1, score.numbers do
       local numIndex = score.values[i] + 1
       local extraLetterDistance = (xDist * (i - 1))
       score.numberGfx[numIndex].draw(score.position.x + extraLetterDistance, score.position.y)
