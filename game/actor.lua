@@ -12,10 +12,16 @@ local Actor = {}
 --  rotation = 0, --optional
 --  color = {255, 255, 255, 255}, --optional
 --  imagePath = "gfx/ball.png",
+--  hitBoxModifier = { -- The modifiers are relative.
+--    x = 5, y = 5,
+--    w = -5, h -5 
+--  }
+--
 --  controller = nil, -- the controls for the actor. 
 --    This can be the ball (travel forward and bounce), 
 --    It can be the paddle for the player that goes up and down depending on the keys pressed
 --    Or our simple AI, moving up and down depending on the balls position
+--
 --  meta = nil, -- Meta attaches extra information to the actor object.
                 -- This could be health, or a score that you get when you interact, anything really.
                 -- If its something thats going to be on EVERY actor object i recommend that you implement it
@@ -43,6 +49,7 @@ Actor.new = function(params)
                                                         -- but since we're not using a typed language, it'll just give us extra overhead in the end.
   actor.remove = false
   actor.meta = params.meta or nil
+  actor.hitBoxModifier = params.hitBoxModifier or { x = 0, y = 0, h = 0, w = 0 }
   
   -- The controller is a callback function we're going to be attaching. If we dont apply one, we set an empty call back function.
   -- This is just to make the code cleaner later - if we dont attach a controller I dont want to have to check if this variable
@@ -52,10 +59,18 @@ Actor.new = function(params)
   end
   actor.setController(params.controller)
      
-  actor.getBox = function()
-    return { x = actor.position.x - actor.size.w2, y = actor.position.y - actor.size.h2, w = actor.size.w, h = actor.size.h }
+  actor.getBox = function() --The box is used only for hit detection
+    return { x = actor.position.x - actor.size.w2 + actor.hitBoxModifier.x, 
+             y = actor.position.y - actor.size.h2 + actor.hitBoxModifier.y, 
+             w = actor.size.w + actor.hitBoxModifier.w, 
+             h = actor.size.h + actor.hitBoxModifier.h
+           }
   end                                                         
   actor.box = actor.getBox()  --This is used for collision. It updates and boxes the x, y, w, and h every update.
+  
+  actor.attachMeta = function(meta)
+    actor.meta = meta
+  end
     
   actor.update = function(deltatime)    
     -- Our new position is: 
