@@ -15,6 +15,7 @@ local Goose5Scene = require("game/turbulent_goose/turbulent_goose_5_enemies/scen
 local Goose6Scene = require("game/turbulent_goose/turbulent_goose_6_collision/scene")
 local Goose7Scene = require("game/turbulent_goose/turbulent_goose_7_DEATH/scene")
 local Goose8Scene = require("game/turbulent_goose/turbulent_goose_8_parallax/scene")
+local Goose9Scene = require("game/turbulent_goose/turbulent_goose_9_ai/scene")
 
 local Particles = require("lib/particles")
 
@@ -203,6 +204,14 @@ debugScene.new = function()
     particles_bubbles = nil
   end
   scene.registerButton(Button.newButton(196 + 160 + 70, 242, "gfx/goose/button8.png", "gfx/goose/button8.png", openGoose8Scene, nil, {2, 2})) 
+  
+  local openGoose9Scene = function()    
+    local bscene = Goose9Scene.new()
+    scene.addChildScene(bscene)
+    scene.buttons = {}
+    particles_bubbles = nil
+  end
+  scene.registerButton(Button.newButton(196 + 160, 312, "gfx/goose/button9.png", "gfx/goose/button9.png", openGoose9Scene, nil, {2, 2})) 
   
   return scene
 end

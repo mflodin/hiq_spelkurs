@@ -8,11 +8,13 @@ SkyRock.gfx = {
   down = "gfx/goose/skyRockDown.png",
 }
 
-SkyRock.speed = 150
+SkyRock.speed = 350
 SkyRock.space = 400
-SkyRock.start_y = 450
-SkyRock.rockDistance = -650
+SkyRock.spawnPos_y = 450
+SkyRock.first_rock = 650
+SkyRock.rockDistance = -675
 SkyRock.randomDistance = 100
+SkyRock.spawnTime = 1.2
 
 SkyRock.collision = {}
 SkyRock.collision.goose = function(skyrock, goose)

@@ -4,6 +4,7 @@ local Actor = require("game/actor")
 local Goose = require("game/turbulent_goose/turbulent_goose_7_DEATH/goose")
 local Skyrock = require("game/turbulent_goose/turbulent_goose_7_DEATH/skyrock")
 
+
 local turbulentGoose = {}
 turbulentGoose.new = function(playerA_settings, playerB_settings)
   

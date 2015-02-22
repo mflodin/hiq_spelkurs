@@ -26,6 +26,21 @@ Goose.fallSpeed_max = 5
 Goose.gravity = 10
 Goose.rotationMax = 0.2
 
+Goose.event = {}
+Goose.event.onDeath = function(scene, actor, reset)
+  
+  return function()
+    Goose.animation.death(scene, actor)()
+  
+    local waitThen = WaitThen.new(Goose.animation.deathAnimationTime + 1.5, function()
+      reset()
+    end)  
+  
+    scene.addWaitThen(waitThen)
+  end
+  
+end
+
 Goose.collision = {}
 Goose.collision.test = {}
 Goose.collision.test.box = function(goose, skyRock)  
@@ -33,11 +48,12 @@ Goose.collision.test.box = function(goose, skyRock)
 end
 
 Goose.animation = {}
+Goose.animation.deathAnimationTime = 2
 Goose.animation.death = function(scene, actor)
   
   return function()
     
-    local tweenTime = 2
+    local tweenTime = Goose.animation.deathAnimationTime
     local image = actor.image
     local explo = Goose.image.explode
     local gooseAni = { 
@@ -76,18 +92,46 @@ Goose.animation.death = function(scene, actor)
     local tween = Tween.new(tweenTime, gooseAni, targetAni, "outQuad")
     scene.addTween(tween)
     
+    --fade out animation
+    local waitThenFade = WaitThen.new(tweenTime + 1, 
+      function()
+        local tweenTime = 0.5
+        local current = { 
+          a = 0,     
+        }
+        local target = {
+          a = 255
+        }
+        
+        local function draw()
+          love.graphics.setColor(0, 0, 0, current.a)
+          love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())      
+          love.graphics.setColor(255, 255, 255, 255)
+        end
+        
+        scene.addGeneric(Generic.new(draw), tweenTime)
+        
+        local tween = Tween.new(tweenTime, current, target, "linear")
+        scene.addTween(tween)
+      end
+    )
+    
+    scene.addWaitThen(waitThenFade)
+    
   end
 end
 
 --local Example_params = {
 --  jumpKey = "space",
 --  scene = scene,
+--  reset = callback,
 --}
 Goose.controller = function(params)
   local jumpKey = params.jumpKey
   local fallSpeed = 0 
   local can_jump = true 
   local scene = params.scene
+  local reset = params.reset
   
   local calculateGravity = function(deltaTime) --returns new fallspeed            
     return math.min(fallSpeed + (Goose.gravity * deltaTime), Goose.fallSpeed_max)
@@ -100,13 +144,15 @@ Goose.controller = function(params)
     if pressed_jump and can_jump then  -- and if the button was previously released
       fallSpeed = Goose.jumpSpeed
       can_jump = false      
+      
     end
     can_jump = not(love.keyboard.isDown(jumpKey)) -- mark jump as available if the key is up
     
     --If we go at the bottom or top, play the death animation and mark as removable
     if Goose.screenBoundaryCollision(actor) then
-      Goose.animation.death(scene, actor)()
+      Goose.event.onDeath(scene, actor, reset)()
       actor.remove = true
+      
     end
     
     --Simple animation
@@ -138,7 +184,7 @@ Goose.screenBoundaryCollision = function(goose)
   end
   
   --Collision vs top
-  if goose.position.y < 0 then --we allow the bird to go a bit above
+  if goose.position.y < 0 then -- We allow the bird to go a bit above, makes the game a bit easier
     return true
   end
   

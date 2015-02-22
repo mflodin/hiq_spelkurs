@@ -44,6 +44,11 @@ Score.new = function(params)
     score.update()
   end
   
+  score.set = function(points)
+    score.score = points
+    score.update()
+  end
+  
   score.update = function()
     -- Concatenate number to string and convert it to array. Unclean and inefficient. Refactor.
     score.values = numberToList("" .. score.score, score.numbers)

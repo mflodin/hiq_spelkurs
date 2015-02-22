@@ -7,7 +7,7 @@ local Actor = require("game/actor")
 local Paddle = require("game/breakout_fun/paddle_breakout")
 local Ball = require("game/breakout_fun/ball_breakout")
 local Brick = require("game/breakout_fun/brick_breakout")
-local Score = require("game/breakout_fun/score")
+local Score = require("lib/score")
 local Lives = require("game/breakout_fun/lifeAnimation")
 local Levels = require("game/breakout_fun/levels")
 

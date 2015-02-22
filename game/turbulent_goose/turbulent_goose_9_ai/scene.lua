@@ -1,8 +1,8 @@
 local Scene = require("lib/scene")
 local Collider = require("lib/collider")
 local Actor = require("game/actor")
-local Goose = require("game/turbulent_goose/turbulent_goose_8_parallax/goose")
-local Skyrock = require("game/turbulent_goose/turbulent_goose_8_parallax/skyrock")
+local Goose = require("game/turbulent_goose/turbulent_goose_9_ai/goose")
+local Skyrock = require("game/turbulent_goose/turbulent_goose_9_ai/skyrock")
 local Parallax = require("lib/parallax")
 local Score = require("lib/score")
 local Tween = require("lib/tween")
@@ -13,7 +13,8 @@ local turbulentGoose = {}
 turbulentGoose.new = function(playerA_settings, playerB_settings)
   
   local goose = {} -- This is the object that contains the game-functions for the scene
-  local gooseActor
+  local gooseActors = {}
+--  local gooseActor
   local scene = {} -- We will allocate this using the scene later. 
   local actors = {} -- List of actors
   local collider = nil
@@ -30,27 +31,69 @@ turbulentGoose.new = function(playerA_settings, playerB_settings)
   local currentScore = nil
   local currentScore_float = 0
   
-  local createGoose = function(reset) 
+  local fading = false
+  local fade_time = 0.5
+  
+  local createGoose = function(y, controller, color) 
+    
+    color = color or {255, 255, 255, 255}
+    
+    local params = {
+      position = { 100, y },
+      direction = { 0, 0 },
+      speed = Goose.speed,
+      color = color,
+      rotation = 0,
+      scale = { 4, 4 },
+      imagePath = Goose.gfx.image,
+      controller = controller,
+      hitBoxModifier = Goose.hitbox_relative,
+    }
+    local actor = Actor.new(params) 
+    local gooseCollider = Collider.new(actor, Goose.event.onDeath(scene, actor, nil))
+    actor.attachMeta({ 
+      collider = gooseCollider,
+      isGoose = true,
+    }) 
+    -- Attach meta collider manually instead of via the actor creation.
+    -- This is because we havent created the actor yet and we need
+    -- it for the collider. 
+    -- Properly encapsulated, but maybe a bit messy?
+
+    gooseActors[actor] = actor
+    
+    return actor
+  end
+  
+  local createAiGoose = function(y, ai, color)    
+    local params = {
+      scene = scene,
+      actors = actors,
+      ai = ai
+    }    
+        
+    return createGoose(y, Goose.AI.controller(params), color)     
+  end
+  
+  local createPlayerGoose = function(y, color) 
     
     local gooseControllerParams = {
       jumpKey = " ",
       scene = scene,
-      reset = reset
+      reset = nil,      
     }
     
-    local gooseParams = {
-      position = { 100, 150 },
-      direction = { 0, 0 },
-      speed = Goose.speed,
-      rotation = 0,
-      scale = { 4, 4 },
-      imagePath = Goose.gfx.image,
-      controller = Goose.controller(gooseControllerParams),
+    local meta = { 
+      isPlayer = true
     }
-    gooseActor = Actor.new(gooseParams)    
     
-    return gooseActor
+    local controller = Goose.player_controller(gooseControllerParams)
+    local actor = createGoose(y, controller, color) 
+    actor.meta.isPlayer = true
+    
+    return actor
   end
+  
   
   local createSkyRock = function(altitude, isTop) 
     local image = Skyrock.gfx.down
@@ -65,23 +108,32 @@ turbulentGoose.new = function(playerA_settings, playerB_settings)
       rotation = 0,
       scale = { 4, 4 },
       imagePath = image,
-      controller = Skyrock.controller() -- pass the collider to the controller so it can remove the actor
+      controller = Skyrock.controller(), -- pass the collider to the controller so it can remove the actor
                                                 -- from the collider upon reaching left side of the screen
+      meta = {
+        isSkyrock = true,
+        isTop = isTop
+      }
     }    
     local actor = Actor.new(params) 
-    if collider then 
-      collider.addObject(actor, Skyrock.collision.goose, Goose.collision.test.box) 
+    
+    --Make it so that the collider adds the objects on each gooses collider instead  
+    for key, goose in pairs(gooseActors) do
+      goose.meta.collider.addObject(actor, Skyrock.collision.goose, Goose.collision.test.box) 
     end
         
     return actor
   end  
   
+  
   local createSkyRocks = function(altitude) 
     local top = true
     local added_distance = -math.random(Skyrock.randomDistance)
     
-    actors[#actors + 1] = createSkyRock(altitude + Skyrock.rockDistance + added_distance, top)
-    actors[#actors + 1] = createSkyRock(altitude, not(top))    
+    local topRock = createSkyRock(altitude + Skyrock.rockDistance + added_distance, top) 
+    local botRock = createSkyRock(altitude, not(top))    
+    actors[topRock] = topRock
+    actors[botRock] = botRock
   end
   
   local setupParallax = function(position)
@@ -126,7 +178,8 @@ turbulentGoose.new = function(playerA_settings, playerB_settings)
   setupParallax(skyPosition) --Notice that we're setting this up here and not on onBegin - we dont need or want to reset this.
   
   goose.fadeIn = function()
-    local tweenTime = 0.5
+    
+    local tweenTime = fade_time
     local current = { 
       a = 255,     
     }
@@ -146,21 +199,57 @@ turbulentGoose.new = function(playerA_settings, playerB_settings)
     scene.addTween(tween)
   end
   
+  goose.fadeOut = function()
+    fading = true
+    
+    local tweenTime = fade_time
+    local current = { 
+      a = 0,     
+    }
+    local target = {
+      a = 255
+    }
+    
+    local function draw()
+      love.graphics.setColor(0, 0, 0, current.a)
+      love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())      
+      love.graphics.setColor(255, 255, 255, 255)
+    end
+    
+    scene.addGeneric(Generic.new(draw), tweenTime)
+    
+    local tween = Tween.new(tweenTime, current, target, "linear")
+    scene.addTween(tween)
+  end
+  
   goose.reset = function()
+    
+    fading = false
+        
     goose.fadeIn()
     
     spawnTimer = 0
     
     actors = {}
     
-    local bird = createGoose(goose.reset)
-    actors[#actors + 1] = bird
+    --This is where we create the ai's! (and the player)
     
-    --We're just adding collision, not what actually happens when we collide.
-    --For now, we just turn the sky red.
-    collider = Collider.new(bird, Goose.event.onDeath(scene, bird, goose.reset))
+    local randomGoose = createAiGoose(300, Goose.AI.flaps_randomly, { 255, 100, 255, 128 })
+    local timeGoose = createAiGoose(185, Goose.AI.flaps_every_half_second, { 255, 255, 100, 128 })
+    local followGoose = createAiGoose(185, Goose.AI.follows_player, { 255, 0, 0, 128 })
+    local dodgeGoose = createAiGoose(185, Goose.AI.avoids_nearest_skyrock, { 0, 0, 0, 128 })
+    local dodgeGoose2 = createAiGoose(550, Goose.AI.avoids_nearest_skyrock, { 255, 100, 255, 128 })
     
-    createSkyRocks(Skyrock.start_y)
+    actors[dodgeGoose] = dodgeGoose    
+    actors[dodgeGoose2] = dodgeGoose2
+    actors[randomGoose] = randomGoose
+    actors[timeGoose] = timeGoose
+    actors[followGoose] = followGoose
+    
+    local player = createPlayerGoose(150, { 255, 255, 255, 255 })
+    actors[player] = player
+    
+    createSkyRocks(Skyrock.first_rock)
     
     local previousScore = 0
     if bestScore then
@@ -202,23 +291,42 @@ turbulentGoose.new = function(playerA_settings, playerB_settings)
   end
 
   local onUpdate = function(deltaTime)
-    
+   
+   
     if currentScore.score > bestScore.score then
       bestScore.set(currentScore.score)
       bestScore.color = { 255, 0, 0, 200 }
     end
     
-    if collider then
-      collider.update(deltaTime)
+    local activeGeese = 0
+    for key, goose in pairs(gooseActors) do
+      goose.meta.collider.update(deltaTime)
+      
+      activeGeese = activeGeese + 1
+    end
+    
+    if activeGeese == 0 then
+      if fading == false then        
+        fading = true
+        local waitUntilAnimationIsDone = WaitThen.new(Goose.animation.deathAnimationTime - 1, function()
+          goose.fadeOut()
+          local restartWaitThen = WaitThen.new(fade_time, function()
+            goose.reset()
+          end)      
+          scene.addWaitThen(restartWaitThen)            
+        end)
+        scene.addWaitThen(waitUntilAnimationIsDone)
+        
+      end
     end
     
     spawnTimer = spawnTimer + deltaTime
     
-    if spawnTimer > spawnTime then
-      createSkyRocks(Skyrock.space + math.random(Skyrock.start_y))
-      spawnTimer = spawnTimer - spawnTime
+    if spawnTimer > Skyrock.spawnTime then
+      createSkyRocks(Skyrock.space + math.random(Skyrock.spawnPos_y))
+      spawnTimer = spawnTimer - Skyrock.spawnTime
       
-      if gooseActor then
+      if activeGeese then
         currentScore.add(1) 
       end
     end
@@ -226,14 +334,16 @@ turbulentGoose.new = function(playerA_settings, playerB_settings)
     for key, actor in pairs(actors) do
       actor.update(deltaTime)
      
-      if actor.remove then
-        if actor == gooseActor then
-          collider = nil --This is spaghett-ish code. It should be stored as a meta function on the goose. 
-          gooseActor = nil
-        end   
-      
-        if collider then
-          collider.removeObject(actor)
+      if actor.remove then       
+
+        if gooseActors[actor] then 
+          gooseActors[actor].meta.collider = nil
+          gooseActors[actor] = nil          
+        else 
+          --remove skyrock from all colliders
+          for key, goose in pairs(gooseActors) do
+            goose.meta.collider.removeObject(actor)
+          end
         end
         
         actors[key] = nil
